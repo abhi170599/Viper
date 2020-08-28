@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/defender.dir/main.cpp.o CMakeFiles/defender.dir/PortScanner.cpp.o CMakeFiles/defender.dir/utils.cpp.o  -o defender 
