@@ -33,7 +33,7 @@ class PortScanner{
       public:
             PortScanner(const std::string proc):procdir(proc){};
             void getPortInodes();
-            std::vector<Port*> scanProcessPorts();
+            std::string scanProcessPorts();
             std::vector<std::string> getProcesses();
             Port* extractProcessInfo(const std::string &);
 

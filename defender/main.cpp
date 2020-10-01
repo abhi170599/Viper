@@ -7,11 +7,8 @@
  */
 
 # include <iostream>
-
-
-
-
 # include "PortScanner.cpp"
+# include "RSA.cpp"
 
 const std::string PROCDIR = "/proc/";
 
@@ -29,7 +26,13 @@ int main(){
         cout<<"("<<p->type<<" : "<<p->service<<" : "<<p->pid<<" : "<<p->port<<")"<<"\n";
         //cout<<p<<"\n";
     }
-
+    
+    string message = "Hello World";
+    RSA rsa;
+    string cipher = rsa.encrypt(message);
+    cout<<"Cipher text = "<<cipher;
+    string plain = rsa.decrypt(cipher);
+    cout<<"Decipher : "<<plain;
 
 
 
