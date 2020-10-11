@@ -24,6 +24,9 @@ void send(tcp::socket & socket,const string & message){
     boost::asio::write(socket,boost::asio::buffer(msg));
 }
 
+// RSA Credentials
+RSA_Key priv(47,143),pub(23,143);
+
 int main() {
 
      RSA rsa;
@@ -32,27 +35,30 @@ int main() {
      tcp::socket socket(io_service);
 //connection
      socket.connect( tcp::endpoint( boost::asio::ip::address::from_string("127.0.0.1"), 8000 ));
-// request/message from client
-     const string msg = "Relop 127.0.0.1 !\n";
-     boost::system::error_code error;
-     boost::asio::write( socket, boost::asio::buffer(msg), error );
-     if( !error ) {
-        // cout << "Client sent hello message!" << endl;
-     }
-     else {
-        cout << "send failed: " << error.message() << endl;
-     }
- // getting response from server
-    boost::asio::streambuf receive_buffer;
-    boost::asio::read(socket, receive_buffer, boost::asio::transfer_all(), error);
-    if( error && error != boost::asio::error::eof ) {
-        cout << "receive failed: " << error.message() << endl;
-    }
-    else {
-        const char* data = boost::asio::buffer_cast<const char*>(receive_buffer.data());
-        string msg(data);
-        string decypt = rsa.decrypt(msg);
-        cout << decypt << endl;
-    }
+
+// request auth message from client
+     const string msg = "Relop abhi";
+     
+     // send request
+     send(socket,msg);
+     
+     // recieve auth token
+     string data = _read(socket);
+     //cout<<data;
+     std::string token = rsa.decrypt(rsa.decrypt(data,pub),pub);
+     //cout<<token;
+     // resend encrypted token
+     std::string tkn_back = rsa.encrypt(token,priv);
+     send(socket,tkn_back);
+
+     // read authentication result
+     string auth_res = _read(socket);
+     cout<<auth_res;
+
+     string ports_en = _read(socket);
+     string ports = rsa.decrypt(ports_en,priv);
+     cout<<ports;
+     
+     
     return 0;
 }

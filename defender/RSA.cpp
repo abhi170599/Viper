@@ -7,23 +7,23 @@
 # include "RSA.h"
 
 
-long int RSA::e = 7;
-long int RSA::d = 3;
-long int RSA::n = 33;
+long int RSA::e = 23;
+long int RSA::d = 47;
+long int RSA::n = 143;
 
-std::string RSA::encrypt(std::string message){
+std::string RSA::encrypt(std::string message,RSA_Key key){
      std::string cipher="";
      for(auto m:message){
          long int pt = (int)m;
-         pt = pt - 96;
+         
          int k = 1;
-        for(int j = 0; j < e; j++)
+        for(int j = 0; j < key.key; j++)
         {
           k = k * pt;
-          k = k % n;
+          k = k % key.n;
         }
       
-      char ct = k + 96;
+      char ct = k;
       cipher+=ct;
       
      }
@@ -31,19 +31,19 @@ std::string RSA::encrypt(std::string message){
      return cipher;
 }
 
-std::string RSA::decrypt(std::string cipher){
+std::string RSA::decrypt(std::string cipher,RSA_Key key){
     std::string message = "";
     for(auto c:cipher){
         long int ct = (int)c;
-        ct = ct-96;
+        
         int k=1;
-        for(int j = 0; j < d; j++)
+        for(int j = 0; j < key.key; j++)
         {
           k = k * ct;
-          k = k % n;
+          k = k % key.n;
         }
       
-      char pt = k + 96;
+      char pt = k;
       message+=pt;
 
     }

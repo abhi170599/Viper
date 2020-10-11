@@ -125,8 +125,8 @@ Port* PortScanner::extractProcessInfo(const std::string &process_path) {
 // driver function to initiate port scanning
 // @params: list of process_ids
 // @return: list of open ports
-std::string PortScanner::scanProcessPorts() {
-    std::string ports="";
+std::vector<Port *> PortScanner::scanProcessPorts() {
+    std::vector<Port *> ports;
     std::vector<std::string> processes = getProcesses();
 
     // reset inode->port map
@@ -138,10 +138,10 @@ std::string PortScanner::scanProcessPorts() {
     for(const auto &process:processes){
         Port *port = this->extractProcessInfo(process);
         if(port!= nullptr){
-            ports+=(port->pid+"-"+port->type+"-"+port->port+"-"+port->service+"\t");
+            ports.push_back(port);
         }
     }
-    ports+="\r";
+    
 
     return ports;
 }
