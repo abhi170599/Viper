@@ -65,7 +65,11 @@ int main(){
     // std::string message = _read(socket);
     // cout<<message;
     
-    std::vector<Port *> port_vec = portScanner.scanProcessPorts(); 
+    std::vector<Port *> port_vec = portScanner.scanProcessPorts();
+    if(port_vec.size()==0){
+        send(socket,rsa.encrypt("No ports exposed",pub));
+        socket.close(); 
+        } 
     std::string ports="";
     for(auto &p:port_vec){
         //cout<<"("<<p->type<<" : "<<p->service<<" : "<<p->pid<<" : "<<p->port<<")"<<"\n";
